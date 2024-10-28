@@ -1,0 +1,344 @@
+about:
+  date: October 28, 2024 16:02:11
+  recent_changes: works with modified safrs-react-admin
+  version: 0.0.0
+api_root: '{http_type}://{swagger_host}:{port}/{api}'
+authentication: '{system-default}'
+info:
+  number_relationships: 11
+  number_tables: 12
+info_toggle_checked: true
+resources:
+  Appointment:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: dinosaur_id
+      required: true
+    - name: sitter_id
+      required: true
+    - name: date_time
+      required: true
+      type: DATETIME
+    description: Booking details for each petsitting session.
+    info_list: Booking details for each petsitting session.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - appointment_id
+      name: ServiceRecordList
+      resource: ServiceRecord
+    - direction: toone
+      fks:
+      - dinosaur_id
+      name: dinosaur
+      resource: Dinosaur
+    - direction: toone
+      fks:
+      - sitter_id
+      name: sitter
+      resource: Sitter
+    type: Appointment
+    user_key: id
+  Customer:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: email
+    - name: phone_number
+    - name: address
+    - name: id
+    description: Stores customer information, who own pets and avail petsitting services.
+    info_list: Stores customer information, who own pets and avail petsitting services.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - customer_id
+      name: DinosaurList
+      resource: Dinosaur
+    - direction: tomany
+      fks:
+      - customer_id
+      name: PaymentList
+      resource: Payment
+    type: Customer
+    user_key: name
+  Dinosaur:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: customer_id
+      required: true
+    - name: type_id
+      required: true
+    - name: age
+    - name: last_checkup_date
+      type: DATETIME
+    - name: id
+    description: Individual dinosaur pets tied to a specific customer and type.
+    info_list: Individual dinosaur pets tied to a specific customer and type.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - dinosaur_id
+      name: AppointmentList
+      resource: Appointment
+    - direction: tomany
+      fks:
+      - dinosaur_id
+      name: FoodLogList
+      resource: FoodLog
+    - direction: tomany
+      fks:
+      - dinosaur_id
+      name: HealthRecordList
+      resource: HealthRecord
+    - direction: toone
+      fks:
+      - customer_id
+      name: customer
+      resource: Customer
+    - direction: toone
+      fks:
+      - type_id
+      name: type
+      resource: DinosaurType
+    type: Dinosaur
+    user_key: name
+  DinosaurType:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: species
+      required: true
+    - name: average_weight
+    description: Stores different types of dinosaurs available for petsitting.
+    info_list: Stores different types of dinosaurs available for petsitting.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - type_id
+      name: DinosaurList
+      resource: Dinosaur
+    type: DinosaurType
+    user_key: id
+  FoodLog:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: dinosaur_id
+      required: true
+    - name: food_type_id
+      required: true
+    - name: feeding_date
+      required: true
+      type: DATETIME
+    description: Records feeding information for each dinosaur.
+    info_list: Records feeding information for each dinosaur.
+    tab_groups:
+    - direction: toone
+      fks:
+      - dinosaur_id
+      name: dinosaur
+      resource: Dinosaur
+    - direction: toone
+      fks:
+      - food_type_id
+      name: food_type
+      resource: FoodType
+    type: FoodLog
+    user_key: id
+  FoodType:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: nutritional_value
+    - name: id
+    description: Details about different food types provided to dinosaurs.
+    info_list: Details about different food types provided to dinosaurs.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - food_type_id
+      name: FoodLogList
+      resource: FoodLog
+    type: FoodType
+    user_key: name
+  HealthCondition:
+    attributes:
+    - label: ' description*'
+      name: description
+      required: true
+      search: true
+      sort: true
+    - name: id
+    description: Health conditions or issues observed with dinosaurs.
+    info_list: Health conditions or issues observed with dinosaurs.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - condition_id
+      name: HealthRecordList
+      resource: HealthRecord
+    type: HealthCondition
+    user_key: description
+  HealthRecord:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: condition_id
+      required: true
+    - name: dinosaur_id
+      required: true
+    - name: observation_date
+      required: true
+      type: DATETIME
+    description: Logs health conditions associated with a dinosaur.
+    info_list: Logs health conditions associated with a dinosaur.
+    tab_groups:
+    - direction: toone
+      fks:
+      - condition_id
+      name: condition
+      resource: HealthCondition
+    - direction: toone
+      fks:
+      - dinosaur_id
+      name: dinosaur
+      resource: Dinosaur
+    type: HealthRecord
+    user_key: id
+  Payment:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: customer_id
+      required: true
+    - name: amount
+      required: true
+    - name: payment_date
+      required: true
+      type: DATETIME
+    description: Payment details relating to customer bookings and services.
+    info_list: Payment details relating to customer bookings and services.
+    tab_groups:
+    - direction: toone
+      fks:
+      - customer_id
+      name: customer
+      resource: Customer
+    type: Payment
+    user_key: id
+  ServiceRecord:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: appointment_id
+      required: true
+    - name: service_type_id
+      required: true
+    description: Association between appointments and the services provided.
+    info_list: Association between appointments and the services provided.
+    tab_groups:
+    - direction: toone
+      fks:
+      - appointment_id
+      name: appointment
+      resource: Appointment
+    - direction: toone
+      fks:
+      - service_type_id
+      name: service_type
+      resource: ServiceType
+    type: ServiceRecord
+    user_key: id
+  ServiceType:
+    attributes:
+    - label: ' description*'
+      name: description
+      required: true
+      search: true
+      sort: true
+    - name: price
+    - name: id
+    description: Catalog of different services provided for dinosaur pets.
+    info_list: Catalog of different services provided for dinosaur pets.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - service_type_id
+      name: ServiceRecordList
+      resource: ServiceRecord
+    type: ServiceType
+    user_key: description
+  Sitter:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: expertise
+    - name: id
+    description: Details of assistants trained to take care of dinosaurs.
+    info_list: Details of assistants trained to take care of dinosaurs.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - sitter_id
+      name: AppointmentList
+      resource: Appointment
+    type: Sitter
+    user_key: name
+settings:
+  HomeJS: /admin-app/home.js
+  max_list_columns: 8
+  style_guide:
+    applicationLocales:
+    - en
+    - es
+    currency_symbol: $
+    currency_symbol_position: left
+    date_format: LL
+    decimal_max: '1000000000'
+    decimal_min: '0'
+    decimal_separator: .
+    detail_mode: tab
+    edit_on_mode: dblclick
+    exclude_listpicker: false
+    include_translation: 'false'
+    keycloak_client_id: alsclient
+    keycloak_realm: kcals
+    keycloak_url: http://localhost:8080
+    locale: en
+    max_decimal_digits: '4'
+    min_decimal_digits: '2'
+    new_mode: dialog
+    pick_style: list
+    row_height: small,
+    serviceType: OntimizeEE
+    startSessionPath: /auth/login
+    style: light
+    thousand_separator: ','
+    use_keycloak: 'false'

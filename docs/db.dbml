@@ -1,0 +1,115 @@
+// Copy this text, paste to https://dbdiagram.io/d
+// Or, https://databasediagram.com/app
+// Or, view in VSCode with extension: "DBML Live Preview"
+
+Project DBML {
+  Note: '''
+Appointment: Booking details for each petsitting session.
+Dinosaur: Individual dinosaur pets tied to a specific customer and type.
+Sitter: Details of assistants trained to take care of dinosaurs.
+Customer: Stores customer information, who own pets and avail petsitting services.
+DinosaurType: Stores different types of dinosaurs available for petsitting.
+FoodLog: Records feeding information for each dinosaur.
+FoodType: Details about different food types provided to dinosaurs.
+HealthCondition: Health conditions or issues observed with dinosaurs.
+HealthRecord: Logs health conditions associated with a dinosaur.
+Payment: Payment details relating to customer bookings and services.
+ServiceRecord: Association between appointments and the services provided.
+ServiceType: Catalog of different services provided for dinosaur pets.
+'''
+}
+
+Table Appointment {
+    id INTEGER [primary key]
+    date_time DATETIME 
+    dinosaur_id INTEGER 
+    sitter_id INTEGER 
+    }
+
+Table Dinosaur {
+    id INTEGER [primary key]
+    name VARCHAR 
+    age INTEGER 
+    last_checkup_date DATETIME 
+    customer_id INTEGER 
+    type_id INTEGER 
+    }
+
+Table Sitter {
+    id INTEGER [primary key]
+    name VARCHAR 
+    expertise VARCHAR 
+    }
+
+Table Customer {
+    id INTEGER [primary key]
+    name VARCHAR 
+    email VARCHAR 
+    phone_number VARCHAR 
+    address VARCHAR 
+    }
+
+Table DinosaurType {
+    id INTEGER [primary key]
+    species VARCHAR 
+    average_weight FLOAT 
+    }
+
+Table FoodLog {
+    id INTEGER [primary key]
+    dinosaur_id INTEGER 
+    food_type_id INTEGER 
+    feeding_date DATETIME 
+    }
+
+Table FoodType {
+    id INTEGER [primary key]
+    name VARCHAR 
+    nutritional_value FLOAT 
+    }
+
+Table HealthCondition {
+    id INTEGER [primary key]
+    description VARCHAR 
+    }
+
+Table HealthRecord {
+    id INTEGER [primary key]
+    dinosaur_id INTEGER 
+    condition_id INTEGER 
+    observation_date DATETIME 
+    }
+
+Table Payment {
+    id INTEGER [primary key]
+    customer_id INTEGER 
+    amount FLOAT 
+    payment_date DATETIME 
+    }
+
+Table ServiceRecord {
+    id INTEGER [primary key]
+    appointment_id INTEGER 
+    service_type_id INTEGER 
+    }
+
+Table ServiceType {
+    id INTEGER [primary key]
+    description VARCHAR 
+    price FLOAT 
+    }
+
+
+
+// Relationships
+    Ref: Appointment.(dinosaur_id) < Dinosaur.(id)
+    Ref: Appointment.(sitter_id) < Sitter.(id)
+    Ref: Dinosaur.(customer_id) < Customer.(id)
+    Ref: Dinosaur.(type_id) < DinosaurType.(id)
+    Ref: FoodLog.(dinosaur_id) < Dinosaur.(id)
+    Ref: FoodLog.(food_type_id) < FoodType.(id)
+    Ref: HealthRecord.(condition_id) < HealthCondition.(id)
+    Ref: HealthRecord.(dinosaur_id) < Dinosaur.(id)
+    Ref: Payment.(customer_id) < Customer.(id)
+    Ref: ServiceRecord.(appointment_id) < Appointment.(id)
+    Ref: ServiceRecord.(service_type_id) < ServiceType.(id)
